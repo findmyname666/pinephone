@@ -31,7 +31,7 @@ So far I was impressed and excited that it really works. I was able to connect t
 
 **Phone Update**
 
-After a while I decided that it was good time for the first system update. Initially I tried to update it via UI: settings -> about -> software updates. It was loading updates for several minutes therefore I decided to try more _linux_ approach e.g. leverage terminal. So far I'm not familiar with [_packman_][8] package manager used on arch based OSes but I found useful write up [pinephone tips and tricks] which help me to get it done.
+After a while I decided that it was good time for the first system update. Initially I tried to update it via UI: settings -> about -> software updates. It was loading updates for several minutes therefore I decided to try more _linux_ approach e.g. leverage terminal. So far I'm not familiar with [_packman_][8] package manager used on arch based OSes but I found useful write up [pinephone tips & tricks][6] which help me to get it done.
 
 - Update mirror list. You don't have to use any flags for [pacman-mirrors][7] tool ... but I decided to use these:
   - _--fasttrack 5_ uses mirrors which are up-to-date for your branch. Limit number of mirrors to 5.
