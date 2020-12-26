@@ -22,7 +22,7 @@ Manjaro OS default user is called _manjaro_ with password _123456_. You need to 
 $ mkdir /mnt/usb
 # replace 'partition_id' with real partition identifier e.g. sda2
 $ sudo mount /dev/partition_id /mnt/usb/
-$ echo 'blacklist stk3310' >> /mnt/usb/etc/modprobe.d/proximity.conf
+$ echo 'blacklist stk3310' |sudo tee -a /mnt/usb/etc/modprobe.d/proximity.con
 ```
 
 - Diconnect the phone from PC, remove SD card and re-boot it into OS. Now you should log in successfully.
