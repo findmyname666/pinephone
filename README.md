@@ -51,7 +51,7 @@ I had to reboot the phone after update because I wasn't able to log in.
 
 **Open issues**
 
-- locales are f* up in terminal due to _kgx_ - [link][9].
+- locales are f* up - [link][9].
 - Phone isn't discoverable via bluetooth - [link][10].
 - Login errors - [link][11].
 - Terminal is reporting missing configuration - [link][12].
