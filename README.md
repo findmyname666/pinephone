@@ -34,11 +34,11 @@ So far I was impressed and excited that it really works. I was able to connect t
 After a while I decided that it was good time for the first system update. Initially I tried to update it via UI: settings -> about -> software updates. It was loading updates for several minutes therefore I decided to try more _linux_ approach e.g. leverage terminal. So far I'm not familiar with [_packman_][8] package manager used on arch based OSes but I found useful write up [pinephone tips & tricks][6] which help me to get it done.
 
 - Update mirror list. You don't have to use any flags for [pacman-mirrors][7] tool ... but I decided to use these:
-  - _--fasttrack 5_ uses mirrors which are up-to-date for your branch. Limit number of mirrors to 5.
+  - _--continent_ create a custom mirror pool from countries within the geolocated continent.
   - _--api --protocol https_ use only mirrors available via HTTPs protocol.
 
 ```
-sudo pacman-mirrors --fasttrack 5 --api --protocol https
+sudo pacman-mirrors --continent --api --protocol https
 ```
 
 - Update packages.
@@ -49,6 +49,13 @@ sudo pacman -Syyu
 
 I had to reboot the phone after update because I wasn't able to log in.
 
+**Open issues**
+
+- locales are f* up in terminal due to _kgx_ - [link][9].
+- Phone isn't discoverable via bluetooth - [link][10].
+- Login errors - [link][11].
+- Terminal is reporting missing configuration - [link][12].
+
 [1]: https://www.pine64.org/pinephone/
 [2]: https://www.pine64.org/2020/08/31/pinephone-manjaro-community-edition/
 [3]: https://wiki.pine64.org/wiki/PinePhone
@@ -58,3 +65,7 @@ I had to reboot the phone after update because I wasn't able to log in.
 [6]: https://forum.manjaro.org/t/pinephone-tips-and-tricks-experience-and-lessons-learned/39655
 [7]: https://wiki.manjaro.org/index.php/Pacman-mirrors
 [8]: https://wiki.manjaro.org/index.php/Pacman_Overview
+[9]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/56
+[10]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/122
+[11]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/123
+[12]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/124
