@@ -49,7 +49,7 @@ sudo pacman -Syyu
 
 I had to reboot the phone after update because I wasn't able to log in.
 
-**Encountered issues**
+### Encountered Issues
 
 - locales are f* up - [link][9].
 
