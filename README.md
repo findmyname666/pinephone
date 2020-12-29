@@ -55,6 +55,7 @@ I had to reboot the phone after update because I wasn't able to log in.
 - Phone isn't discoverable via bluetooth - [link][10].
 - Login errors - [link][11].
 - Terminal is reporting missing configuration - [link][12].
+- errors reported by pacman during upgrade to testing branch - [link][13].
 
 [1]: https://www.pine64.org/pinephone/
 [2]: https://www.pine64.org/2020/08/31/pinephone-manjaro-community-edition/
@@ -69,3 +70,4 @@ I had to reboot the phone after update because I wasn't able to log in.
 [10]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/122
 [11]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/123
 [12]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/124
+[13]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/125
