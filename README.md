@@ -52,6 +52,23 @@ I had to reboot the phone after update because I wasn't able to log in.
 **Open issues**
 
 - locales are f* up - [link][9].
+
+_phosh_ service has backed locale - _LANG env_ in systemd unit file.
+To hot-fix it we need to remove a line which defines _LANG_ variable in phosh unit file.
+Phosh unit file is placed in the path _/etc/systemd/system/phosh.service_.
+
+You can run following _sed_ comand which does the job for you e.g. it comment the line with LANG variable:
+
+```
+sed -r -i 's/^(Environment=LANG=.*)$/#\1/' /etc/systemd/system/phosh.service
+```
+
+Afterwards we need to reload systemd configuration files & restart phosh service:
+
+```
+sudo systemctl daemon-reload && sudo systemctl restart phosh
+```
+
 - Phone isn't discoverable via bluetooth - [link][10].
 - Login errors - [link][11].
 - Terminal is reporting missing configuration - [link][12].
