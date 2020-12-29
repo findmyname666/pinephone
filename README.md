@@ -53,10 +53,11 @@ I had to reboot the phone after update because I wasn't able to log in.
 
 - locale cannot be set - [link][9].
 
-_phosh_ service has backed locale - _LANG env_ in systemd unit file.
-It affects all services started via UI because they are started by _phosh_ and they interit _LANG_ variable.
+_phosh_ service has backed locale, _LANG_ environment variable in systemd unit file.
+It affects all services started via UI because they are started by _phosh_.
+Therefore they inherit _LANG_ variable.
 To hot-fix it we need to remove a line which defines _LANG_ variable in phosh unit file.
-Phosh unit file is placed in the path _/etc/systemd/system/phosh.service_.
+Phosh unit file is stored in the path _/etc/systemd/system/phosh.service_.
 
 You can run following _sed_ comand which does the job for you e.g. it comment the line with LANG variable:
 
