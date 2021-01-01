@@ -75,6 +75,7 @@ sudo systemctl daemon-reload && sudo systemctl restart phosh
 - Login errors - [link][11].
 - Terminal is reporting missing configuration - [link][12].
 - errors reported by pacman during upgrade to testing branch - [link][13].
+- Journal led errors - [link][14].
 
 [1]: https://www.pine64.org/pinephone/
 [2]: https://www.pine64.org/2020/08/31/pinephone-manjaro-community-edition/
@@ -90,3 +91,4 @@ sudo systemctl daemon-reload && sudo systemctl restart phosh
 [11]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/123
 [12]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/124
 [13]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/125
+[14]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/128
