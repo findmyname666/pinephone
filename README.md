@@ -51,7 +51,7 @@ I had to reboot the phone after update because I wasn't able to log in.
 
 ### Encountered Issues
 
-- locale cannot be set - [link][9].
+#### locale cannot be set - [link][9].
 
 _phosh_ service has backed locale, _LANG_ environment variable in systemd unit file.
 It affects all services started via UI because they are started by _phosh_.
@@ -71,11 +71,100 @@ Afterwards we need to reload systemd configuration files & restart phosh service
 sudo systemctl daemon-reload && sudo systemctl restart phosh
 ```
 
-- Phone isn't discoverable via bluetooth - [link][10].
-- Login errors - [link][11].
-- Terminal is reporting missing configuration - [link][12].
-- errors reported by pacman during upgrade to testing branch - [link][13].
-- Journal led errors - [link][14].
+#### Phone isn't discoverable via bluetooth - [link][10].
+#### Login errors - [link][11].
+#### Terminal is reporting missing configuration - [link][12].
+#### errors reported by pacman during upgrade to testing branch - [link][13].
+#### Journal led errors - [link][14].
+#### Phone drops off wifi when sleeping and on battery - [link][15]
+
+User session is suspended due to inactivity when the threshold is fulfilled and phone is powered from battery.
+Once the session is suspended it stops wifi and modem processes.
+This can be seen in journal logs:
+
+```
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.6183] manager: sleep: sleep requested (sleeping: no  enabled: yes)
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.6188] device (p2p-dev-wlan0): state change: disconnected -> unmanaged (reason 'sleeping', sys-iface-state: 'managed')
+Jan 01 14:36:46 manjaro-arm ModemManager[3737]: <info>  [sleep-monitor] system is about to suspend
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.6219] manager: NetworkManager state is now ASLEEP
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.6235] device (wlan0): state change: activated -> deactivating (reason 'sleeping', sys-iface-state: 'managed')
+Jan 01 14:36:46 manjaro-arm dbus-daemon[3639]: [system] Activating via systemd: service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.8' (uid=0 pid=3640 comm="/usr/bin/Net>
+Jan 01 14:36:46 manjaro-arm systemd[1]: Starting Network Manager Script Dispatcher Service...
+Jan 01 14:36:46 manjaro-arm dbus-daemon[3639]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Jan 01 14:36:46 manjaro-arm systemd[1]: Started Network Manager Script Dispatcher Service.
+Jan 01 14:36:46 manjaro-arm wpa_supplicant[3772]: wlan0: CTRL-EVENT-DISCONNECTED bssid=74:83:c2:91:c8:d6 reason=3 locally_generated=1
+Jan 01 14:36:46 manjaro-arm systemd-networkd[3369]: wlan0: Lost carrier
+Jan 01 14:36:46 manjaro-arm systemd-timesyncd[3634]: No network connectivity, watching for changes.
+Jan 01 14:36:46 manjaro-arm wpa_supplicant[3772]: wlan0: CTRL-EVENT-REGDOM-CHANGE init=CORE type=WORLD
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.7873] device (wlan0): supplicant interface state: completed -> disconnected
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.7883] device (wlan0): state change: deactivating -> disconnected (reason 'sleeping', sys-iface-state: 'managed')
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.8191] dhcp4 (wlan0): canceled DHCP transaction
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.8193] dhcp4 (wlan0): state changed bound -> done
+Jan 01 14:36:46 manjaro-arm NetworkManager[3640]: <info>  [1609508206.8469] device (wlan0): state change: disconnected -> unmanaged (reason 'sleeping', sys-iface-state: 'managed')
+Jan 01 14:36:46 manjaro-arm systemd-networkd[3369]: wlan0: Link DOWN
+Jan 01 14:36:47 manjaro-arm systemd[1]: Reached target Sleep.
+Jan 01 14:36:47 manjaro-arm systemd[1]: Starting Suspend...
+Jan 01 14:36:47 manjaro-arm systemd-sleep[5886]: Suspending system...
+Jan 01 14:36:47 manjaro-arm kernel: PM: suspend entry (deep)
+Jan 01 14:36:47 manjaro-arm wpa_supplicant[3772]: nl80211: deinit ifname=wlan0 disabled_11b_rates=0
+```
+
+Default gnome settings:
+- inactivity threshold is set to 5 minutes when powered from battery:
+
+```
+$ dbus-launch gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout
+300
+```
+
+- the phone is suspended when the threshold is fulfilled:
+
+```
+$ dbus-launch gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type
+'suspend'
+```
+
+Inactivity type needs to be adjusted if you don't want to stop / kill wifi due to inactivity.
+All possible types which you can use:
+
+```
+$ dbus-launch gsettings range org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type
+enum
+'blank'
+'suspend'
+'shutdown'
+'hibernate'
+'interactive'
+'nothing'
+'logout'
+```
+
+
+The most suitable option seems to be _blank_. It turns off the screen when the user is inactive.
+
+```
+dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type blank
+```
+
+I use these options so far:
+
+```
+dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 60
+dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 300
+dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type blank
+dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type blank
+```
+
+Furthermore you can set these aliases in `~/.bashrc` so you can switch battery type based on your need:
+
+```
+alias sleep_inactive_type_blank='dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type blank'
+alias sleep_inactive_type_suspend='dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type suspend'
+```
+
+You can find more information about gnome settings on these links:
+- https://people.gnome.org/~pmkovar/system-admin-guide/automatic-logout.html
+- https://blog.sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/
 
 [1]: https://www.pine64.org/pinephone/
 [2]: https://www.pine64.org/2020/08/31/pinephone-manjaro-community-edition/
@@ -92,3 +181,4 @@ sudo systemctl daemon-reload && sudo systemctl restart phosh
 [12]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/124
 [13]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/125
 [14]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/128
+[15]: https://gitlab.manjaro.org/manjaro-arm/issues/pinephone/phosh/-/issues/54
