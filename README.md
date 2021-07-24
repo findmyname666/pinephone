@@ -33,7 +33,7 @@ So far I was impressed and excited that it really works. I was able to connect t
 
 After a while I decided that it was good time for the first system update. Initially I tried to update it via UI: settings -> about -> software updates. It was loading updates for several minutes therefore I decided to try more _linux_ approach e.g. leverage terminal. So far I'm not familiar with [_packman_][8] package manager used on arch based OSes but I found useful write up [pinephone tips & tricks][6] which help me to get it done.
 
-- Update mirror list. You don't have to use any flags for [pacman-mirrors][7] tool ... but I decided to use these:
+- Update list. You don't have to use any flags for [pacman-s][7] tool ... but I decided to use these:
   - _--continent_ create a custom mirror pool from countries within the geolocated continent.
   - _--api --protocol https_ use only mirrors available via HTTPs protocol.
 
@@ -165,6 +165,27 @@ alias sleep_inactive_type_suspend='dbus-launch gsettings set org.gnome.settings-
 You can find more information about gnome settings on these links:
 - https://people.gnome.org/~pmkovar/system-admin-guide/automatic-logout.html
 - https://blog.sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/
+
+#### Failed to boot after upgrade.
+
+Most recently I ran [an update](#phone_update), on ~20.07, which prevented me to log into OS.
+I logged into PH via SSH and run [update command](#phone_update). The updates run several minutes.
+I saw some wierd messages in the terminal about password at the end of the update.
+I didn't pay any attention to it because I was doing other stuff around and that was mistake :)
+Therefore I just rebooted it. After reboot it dropped me into terminal instead of OS.
+There was login prompt asking for password. I didn't have proper keyboard around me to type the password.
+
+<ins>How did I fixed ?</ins>
+- I created [jump-drive](5) micro SD card and boot PH into it.
+- I mounted main partition which contains **/etc**.
+- I set an empty password for my user in **/etc/passwd** by removing the x after the user name.
+- I powered of PH, remove SD card and power it on.
+- PH booted normaly into OS. I was able to log in via UI with old password but logging via SSH didn't work.
+- I changed my password in the terminal with passwd command and SSH login start to work as well.
+
+<ins>Additional notes:</ins>
+- I don't really know why it broke and I don't really have time to investigate it properly.
+- I use testing branch instead of stable one.
 
 [1]: https://www.pine64.org/pinephone/
 [2]: https://www.pine64.org/2020/08/31/pinephone-manjaro-community-edition/
